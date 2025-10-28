@@ -20,3 +20,4 @@ locals {
 resource "aws_s3_bucket" "s3_tf" {
   bucket = "jibin-s3-tf-bkt-${local.account_id}"
 }
+#
