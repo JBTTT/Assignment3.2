@@ -11,14 +11,13 @@ terraform {
       version = "~> 5.0"
     }
   }
-}
 
-terraform {
   backend "s3" {
     bucket = "jibin-s3-tfstate-bucket989"
     key    = "jibin-s3-tfstate-bucket989.tfstate"
     region = "us-east-1"
   }
+
 }
 
 data "aws_caller_identity" "current" {}
