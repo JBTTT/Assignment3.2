@@ -3,6 +3,17 @@ provider "aws" {
 }
 
 terraform {
+  required_version = ">= 1.3.0"
+
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "~> 5.0"
+    }
+  }
+}
+
+terraform {
   backend "s3" {
     bucket = "jibin-s3-tfstate-bucket989"
     key    = "jibin-s3-tfstate-bucket989.tfstate"
