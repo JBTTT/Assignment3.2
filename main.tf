@@ -33,7 +33,7 @@ resource "aws_s3_bucket" "s3_tf" {
 
 # Block public access
 resource "aws_s3_bucket_public_access_block" "public_access" {
-  bucket                  = aws_s3_bucket._tf.id
+  bucket                  = aws_s3_bucket.s3_tf.id
   block_public_acls       = true
   block_public_policy     = true
   ignore_public_acls      = true
