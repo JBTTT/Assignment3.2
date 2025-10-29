@@ -28,5 +28,14 @@ terraform {
 #}
 
 resource "aws_s3_bucket" "s3_tf" {
-  bucket = "jibin-s3-tf-bkt"
+  bucket = "jibin-s3-tf-bkt9889"
+}
+
+# Block public access
+resource "aws_s3_bucket_public_access_block" "public_access" {
+  bucket                  = ibin-s3-tf-bkt9889
+  block_public_acls       = true
+  block_public_policy     = true
+  ignore_public_acls      = true
+  restrict_public_buckets = true
 }
