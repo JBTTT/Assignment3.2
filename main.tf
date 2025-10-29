@@ -1,22 +1,32 @@
 provider "aws" {
-  region = "us-east-1"
+  region = "us-east-1"
 }
 
 terraform {
-  backend "s3" {
-    bucket = "jibin-s3.1-bucket989"
-    key    = "jibin-s3.1-bucket989.tfstate"
-    region = "us-east-1"
-  }
+  required_version = ">= 1.3.0"
+
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "~> 5.0"
+    }
+  }
+
+  backend "s3" {
+    bucket = "jibin-s3-tfstate-bucket989"
+    key    = "jibin-s3-tfstate-bucket989.tfstate"
+    region = "us-east-1"
+  }
+
 }
 
 data "aws_caller_identity" "current" {}
 
 locals {
-  name_prefix = "${split("/", "${data.aws_caller_identity.current.arn}")[1]}"
-  account_id  = "${data.aws_caller_identity.current.account_id}"
+  name_prefix = "${split("/", "${data.aws_caller_identity.current.arn}")[1]}"
+  account_id  = "${data.aws_caller_identity.current.account_id}"
 }
 
 resource "aws_s3_bucket" "s3_tf" {
-  bucket = "jibin-s3-tf-bkt-${local.account_id}"
+  bucket = "${local.name_prefix}-s3-tf-bkt-${local.account_id}"
 }
