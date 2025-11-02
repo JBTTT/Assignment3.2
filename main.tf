@@ -18,16 +18,9 @@ terraform {
     region = "us-east-1"
   }
 
-data "aws_caller_identity" "current" {}
 
-locals {
-  # Get IAM username assuming ARN format ...:user/<username>
-  name_prefix = split("/", data.aws_caller_identity.current.arn)[1]
-  account_id  = data.aws_caller_identity.current.account_id
-}
-
-resource "aws_s3_bucket" "s3_tf" {
-  bucket = "${local.name_prefix}-s3-tf-bkt-${local.account_id}"
+# Create an S3 bucket
+resource "aws_s3_bucket" "simple_bucket" {
+  bucket = "jibin-assignment3.2-s3bucket"
 }
 }
-
