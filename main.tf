@@ -13,8 +13,8 @@ terraform {
   }
 
   backend "s3" {
-    bucket = "jibin-s3-tfstate-bucket989"
-    key    = "jibin-s3-tfstate-bucket989.tfstate"
+    bucket = "jibin-s3-tfstate-bucket9889"
+    key    = "jibin-s3-tfstate-bucket9889.tfstate"
     region = "us-east-1"
   }
 
