@@ -11,7 +11,7 @@ terraform {
     bucket = "sctp-ce11-tfstate"
     key    = "jibin-s3-tfstate.tfstate"
     region = "us-east-1"
-|}
+  }
 }
 
 provider "aws" {
