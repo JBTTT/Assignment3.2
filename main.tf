@@ -18,8 +18,6 @@ terraform {
     region = "us-east-1"
   }
 
-}
-
 data "aws_caller_identity" "current" {}
 
 locals {
@@ -29,54 +27,7 @@ locals {
 }
 
 resource "aws_s3_bucket" "s3_tf" {
-  bucket = "s3-${local.name_prefix}-tf-bkt-${local.account_id}"
+  bucket = "${local.name_prefix}-s3-tf-bkt-${local.account_id}"
+}
 }
 
-# Block public access
-resource "aws_s3_bucket_public_access_block" "log_bucket" {
-  bucket                  = aws_s3_bucket.log_bucket.id
-  block_public_acls       = true
-  ignore_public_acls      = true
-  block_public_policy     = true
-  restrict_public_buckets = true
-}
-
-# Enable versioning
-resource "aws_s3_bucket_versioning" "log_bucket" {
-  bucket = aws_s3_bucket.log_bucket.id
-
-  versioning_configuration {
-    status = "Enabled"
-  }
-}
-
-# Default encryption with KMS
-resource "aws_s3_bucket_server_side_encryption_configuration" "log_bucket" {
-  bucket = aws_s3_bucket.log_bucket.id
-
-  rule {
-    apply_server_side_encryption_by_default {
-      sse_algorithm     = "aws:kms"
-      kms_master_key_id = "alias/aws/s3"
-    }
-  }
-}
-
-# Lifecycle config
-resource "aws_s3_bucket_lifecycle_configuration" "log_bucket" {
-  bucket = aws_s3_bucket.log_bucket.id
-
-  rule {
-    id     = "expire-old-versions"
-    status = "Enabled"
-
-    noncurrent_version_expiration {
-      noncurrent_days = 30
-    }
-  }
-}
-
-# Notification placeholder
-resource "aws_s3_bucket_notification" "log_bucket" {
-  bucket = aws_s3_bucket.log_bucket.id
-}
