@@ -107,24 +107,22 @@ resource "aws_s3_bucket_logging" "secure_logging" {
 resource "aws_s3_bucket_policy" "https_only" {
   bucket = aws_s3_bucket.secure_bucket.id
 
-  policy = jsonencode({
-    Version = "2012-10-17"
-    Statement = [
-      {
-        Sid       = "EnforceTLS"
-        Effect    = "Deny"
-        Principal = "*"
-        Action    = "s3:*"
-        Resource = [
-          "${aws_s3_bucket.secure_bucket.arn}",
-          "${aws_s3_bucket.secure_bucket.arn}/*"
-        ]
-        Condition = {
-          Bool = {
-            "aws:SecureTransport" = "false"
-          }
-        }
+policy = jsonencode({
+  Version = "2012-10-17"
+  Statement = [
+    {
+      Sid       = "EnforceTLS"
+      Effect    = "Deny"
+      Principal = "*"
+      Action    = "s3:*"
+      Resource = [
+        aws_s3_bucket.secure_bucket.arn,
+        format("%s/*", aws_s3_bucket.secure_bucket.arn)
+      ]
+      Condition = {
+        Bool = { "aws:SecureTransport" = "false" }
       }
-    ]
-  })
+    }
+  ]
+})
 }
