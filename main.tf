@@ -32,27 +32,27 @@ resource "aws_s3_bucket" "s3_tf" {
   bucket = "s3-${local.name_prefix}-tf-bkt-${local.account_id}"
 }
 
-# Block public access ✅ CKV2_AWS_6
-resource "aws_s3_bucket_public_access_block" "s3_tf" {
-  bucket                  = aws_s3_bucket.s3_tf.id
+# Block public access
+resource "aws_s3_bucket_public_access_block" "log_bucket" {
+  bucket                  = aws_s3_bucket.log_bucket.id
   block_public_acls       = true
   ignore_public_acls      = true
   block_public_policy     = true
   restrict_public_buckets = true
 }
 
-# Enable versioning ✅ CKV_AWS_21
-resource "aws_s3_bucket_versioning" "s3_tf" {
-  bucket = aws_s3_bucket.s3_tf.id
+# Enable versioning
+resource "aws_s3_bucket_versioning" "log_bucket" {
+  bucket = aws_s3_bucket.log_bucket.id
 
   versioning_configuration {
     status = "Enabled"
   }
 }
 
-# Default encryption with KMS ✅ CKV_AWS_144, CKV_AWS_18
-resource "aws_s3_bucket_server_side_encryption_configuration" "s3_tf" {
-  bucket = aws_s3_bucket.s3_tf.id
+# Default encryption with KMS
+resource "aws_s3_bucket_server_side_encryption_configuration" "log_bucket" {
+  bucket = aws_s3_bucket.log_bucket.id
 
   rule {
     apply_server_side_encryption_by_default {
@@ -62,9 +62,9 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "s3_tf" {
   }
 }
 
-# Lifecycle configuration ✅ CKV2_AWS_61
-resource "aws_s3_bucket_lifecycle_configuration" "s3_tf" {
-  bucket = aws_s3_bucket.s3_tf.id
+# Lifecycle config
+resource "aws_s3_bucket_lifecycle_configuration" "log_bucket" {
+  bucket = aws_s3_bucket.log_bucket.id
 
   rule {
     id     = "expire-old-versions"
@@ -76,19 +76,7 @@ resource "aws_s3_bucket_lifecycle_configuration" "s3_tf" {
   }
 }
 
-# Logging bucket for access logs ✅ CKV_AWS_18
-resource "aws_s3_bucket" "log_bucket" {
-  bucket = "log-${local.name_prefix}-${local.account_id}"
-}
-
-resource "aws_s3_bucket_logging" "s3_tf" {
-  bucket = aws_s3_bucket.s3_tf.id
-
-  target_bucket = aws_s3_bucket.log_bucket.id
-  target_prefix = "s3-access-logs/"
-}
-
-# Notification placeholder ✅ CKV2_AWS_62
-resource "aws_s3_bucket_notification" "s3_tf" {
-  bucket = aws_s3_bucket.s3_tf.id
+# Notification placeholder
+resource "aws_s3_bucket_notification" "log_bucket" {
+  bucket = aws_s3_bucket.log_bucket.id
 }
